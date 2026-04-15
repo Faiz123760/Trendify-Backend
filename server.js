@@ -1,4 +1,5 @@
 import express from "express";
+import fs from "fs";
 import cors from "cors";
 import dotenv from 'dotenv';
 import path from 'path';
@@ -54,17 +55,20 @@ app.get("/health", (req, res) => {
 // Deployment Readiness: Serve Static Files in Production
 // Assuming frontend and admin are built into their respective dist folders
 if (process.env.NODE_ENV === 'production') {
-    // Serve Admin Build
-    app.use('/admin', express.static(path.join(__dirname, '../admin/dist')));
-    
-    // Serve Frontend Build
-    app.use(express.static(path.join(__dirname, '../frontend/dist')));
+    const adminPath = path.join(__dirname, '../admin/dist');
+    const frontendPath = path.join(__dirname, '../frontend/dist');
 
-    // Catch-all for Frontend
-    app.get('(.*)', (req, res) => {
-        if (req.url.startsWith('/api')) return; // Don't catch APIs
-        res.sendFile(path.resolve(__dirname, '../frontend', 'dist', 'index.html'));
-    });
+    if (fs.existsSync(adminPath)) {
+        app.use('/admin', express.static(adminPath));
+    }
+    
+    if (fs.existsSync(frontendPath)) {
+        app.use(express.static(frontendPath));
+        app.get('/:path*', (req, res) => {
+            if (req.url.startsWith('/api')) return; 
+            res.sendFile(path.join(frontendPath, 'index.html'));
+        });
+    }
 } else {
     app.get("/", (req, res) => {
         res.send("API is running in development mode...");
