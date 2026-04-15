@@ -61,7 +61,7 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
     // Catch-all for Frontend
-    app.get('*', (req, res) => {
+    app.get('(.*)', (req, res) => {
         if (req.url.startsWith('/api')) return; // Don't catch APIs
         res.sendFile(path.resolve(__dirname, '../frontend', 'dist', 'index.html'));
     });
