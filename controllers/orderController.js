@@ -98,13 +98,13 @@ const placeOrderStripe =async(req,res)=>{
 const verifyStripe = async(req, res) => {
     const {orderId, success, userId} = req.body;
     try{
-        if(success==='true'){
+        if (success === true || success === 'true') {
             await orderModel.findByIdAndUpdate(orderId, { payment: true});
             await userModel.findByIdAndUpdate(userId, { cartData: {} });
             res.status(200).json({ success: true, message: 'Payment successful and order verified' });
         }
         else{
-            await orderModel.findByIdAndUpdate(orderId);
+            await orderModel.findByIdAndDelete(orderId);
             res.json({ success: false, message: 'Payment failed or cancelled' });
         }
     }catch(error){
@@ -138,7 +138,7 @@ const placeOrderRazorpay =async(req,res)=>{
         await razorpayInstance.orders.create(option,(error,order)=>{
             if(error){
                 console.log(error)
-                return res.status(500).json({succes:false,message:error})
+                return res.status(500).json({success:false,message:error})
             }
             res.json({ success: true, order });
         })

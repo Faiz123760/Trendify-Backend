@@ -55,8 +55,8 @@ app.get("/health", (req, res) => {
 // Deployment Readiness: Serve Static Files in Production
 // Assuming frontend and admin are built into their respective dist folders
 if (process.env.NODE_ENV === 'production') {
-    const adminPath = path.join(__dirname, '../admin/dist');
-    const frontendPath = path.join(__dirname, '../frontend/dist');
+    const adminPath = path.join(__dirname, '../Trendify-admin/dist');
+    const frontendPath = path.join(__dirname, '../Trendify-frontend/dist');
 
     if (fs.existsSync(adminPath)) {
         app.use('/admin', express.static(adminPath));

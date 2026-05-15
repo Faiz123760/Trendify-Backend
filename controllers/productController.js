@@ -1,4 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
 import productModel from "../models/productModel.js";
 
 // INFO: Route for adding a product
@@ -28,6 +29,10 @@ const addProduct = async (req, res) => {
         let result = await cloudinary.uploader.upload(image.path, {
           resource_type: "image",
         });
+        // Delete the local file after upload to Cloudinary
+        if (fs.existsSync(image.path)) {
+            fs.unlinkSync(image.path);
+        }
         return result.secure_url;
       })
     );
