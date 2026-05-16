@@ -69,11 +69,20 @@ if (process.env.NODE_ENV === 'production') {
             res.sendFile(path.join(frontendPath, 'index.html'));
         });
     }
-} else {
-    app.get("/", (req, res) => {
-        res.send("API is running in development mode...");
-    });
 }
+
+// Fallback for root path
+app.get("/", (req, res) => {
+    res.send("API Working");
+});
+
+// 404 Handler
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: "Route not found"
+    });
+});
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {

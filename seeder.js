@@ -4,6 +4,12 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dns from 'node:dns';
+
+// Fix for Node.js 18+ DNS resolution issues with Atlas
+if (dns.setDefaultResultOrder) {
+    dns.setDefaultResultOrder('ipv4first');
+}
 
 // Setup __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -33,7 +39,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_SECRET_KEY,
 });
 
-const assetsPath = path.resolve(__dirname, '../frontend/src/assets');
+const assetsPath = path.resolve(__dirname, '../Trendify-frontend/src/assets');
 
 // Sample data extracted from assets.js
 // Mapping variable names to actual file names
