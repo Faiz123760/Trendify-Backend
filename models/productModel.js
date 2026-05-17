@@ -20,10 +20,12 @@ const productSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
+    index: true,
   },
   subCategory: {
     type: String,
     required: true,
+    index: true,
   },
   sizes: {
     type: Array,
@@ -31,10 +33,12 @@ const productSchema = new mongoose.Schema({
   },
   bestSeller: {
     type: Boolean,
+    index: true,
   },
   date: {
     type: Number,
     required: true,
+    index: true,
   },
   reviews: [
     {

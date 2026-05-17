@@ -113,7 +113,7 @@ const loginAdmin = async (req, res) => {
 const getProfile = async (req, res) => {
     try {
         const { userId } = req.body;
-        const user = await userModel.findById(userId).select("-password");
+        const user = await userModel.findById(userId).select("-password").lean();
         res.status(200).json({ success: true, user });
     } catch (error) {
         console.log(error);
@@ -130,7 +130,7 @@ const updateProfile = async (req, res) => {
             userId,
             { name, phone, address },
             { new: true }
-        ).select("-password");
+        ).select("-password").lean();
 
         res.status(200).json({ success: true, message: "Profile Updated", user: updatedUser });
     } catch (error) {

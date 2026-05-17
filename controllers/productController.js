@@ -62,7 +62,8 @@ const addProduct = async (req, res) => {
 // INFO: Route for fetching all products
 const listProducts = async (req, res) => {
   try {
-    const products = await productModel.find({});
+    // Exclude heavy reviews array, use .lean() for maximum performance (returns plain JS objects)
+    const products = await productModel.find({}).select("-reviews").lean();
     res.status(200).json({ success: true, products });
   } catch (error) {
     console.log("Error while fetching all products: ", error);
@@ -85,7 +86,7 @@ const removeProduct = async (req, res) => {
 const getSingleProduct = async (req, res) => {
   try {
     const { productId } = req.body;
-    const product = await productModel.findById(productId);
+    const product = await productModel.findById(productId).lean();
 
     res.status(200).json({ success: true, product });
   } catch (error) {
