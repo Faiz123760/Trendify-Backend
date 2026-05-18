@@ -14,7 +14,14 @@ const connectDB = async () => {
     if (!url) {
       throw new Error("MONGODB_URL is not defined in environment variables");
     }
-    await mongoose.connect(`${url}/trendify`);
+    
+    const options = {
+      serverSelectionTimeoutMS: 30000, 
+      socketTimeoutMS: 45000,         
+      family: 4                       
+    };
+
+    await mongoose.connect(`${url}/trendify`, options);
   } catch (error) {
     console.error("Failed to connect to MongoDB:", error.message);
     // process.exit(1); 
